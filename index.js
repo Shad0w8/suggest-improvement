@@ -8,39 +8,40 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
-// Dummy suggestions list
 const DUMMY_SUGGESTIONS = [
   "Reduce marketing expenses by switching to social media ads.",
   "Optimize inventory management to lower storage costs.",
   "Introduce loyalty discounts to improve customer retention.",
   "Negotiate with suppliers for better pricing.",
-  "Automate repetitive tasks to save operational costs."
+  "Automate repetitive tasks to save operational costs.",
+  "Outsource non-core tasks to save time and money.",
+  "Use energy-efficient appliances to cut utility costs."
 ];
 
+// Root route
 app.get("/", (req, res) => {
   res.send("API is running! Use /suggest-improvement for suggestions.");
 });
 
-// ---- POST Endpoint ----
-app.post("/suggest-improvement", async (req, res) => {
-  try {
-    // Randomly select a dummy suggestion
-    const suggestion =
-      DUMMY_SUGGESTIONS[Math.floor(Math.random() * DUMMY_SUGGESTIONS.length)];
+// Utility to get 3 random suggestions
+function getRandomSuggestions() {
+  const shuffled = [...DUMMY_SUGGESTIONS].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, 3);
+}
 
-    res.json({ suggestion });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong." });
-  }
+// GET endpoint
+app.get("/suggest-improvement", (req, res) => {
+  const suggestions = getRandomSuggestions();
+  res.json({ suggestions });
 });
 
-// ---- GET Endpoint (when URL is directly visited) ----
-app.get("/suggest-improvement", (req, res) => {
-  const suggestion =
-    DUMMY_SUGGESTIONS[Math.floor(Math.random() * DUMMY_SUGGESTIONS.length)];
-  res.json({ suggestion });
+// POST endpoint
+app.post("/suggest-improvement", (req, res) => {
+  const suggestions = getRandomSuggestions();
+  res.json({ suggestions });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 API running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 API running on http://localhost:${PORT}`)
+);

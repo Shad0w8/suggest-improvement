@@ -17,6 +17,10 @@ const DUMMY_SUGGESTIONS = [
   "Automate repetitive tasks to save operational costs."
 ];
 
+app.get("/", (req, res) => {
+  res.send("API is running! Use /suggest-improvement for suggestions.");
+});
+
 // ---- POST Endpoint ----
 app.post("/suggest-improvement", async (req, res) => {
   try {
